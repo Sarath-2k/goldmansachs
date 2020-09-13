@@ -19,28 +19,28 @@ class _UploadProductDataState extends State<UploadProductData> {
         body: Column(children: [
           Row(
             children: [
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: DropdownButton(
-                    value: _value,
-                    items: [
-                      DropdownMenuItem(
-                        child: Text("First Item"),
-                        value: 1,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Second Item"),
-                        value: 2,
-                      ),
-                      DropdownMenuItem(child: Text("Third Item"), value: 3),
-                      DropdownMenuItem(child: Text("Fourth Item"), value: 4)
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        _value = value;
-                      });
-                    }),
-              ),
+              // Container(
+              //   padding: EdgeInsets.all(20.0),
+              //   child: DropdownButton(
+              //       value: _value,
+              //       items: [
+              //         DropdownMenuItem(
+              //           child: Text("First Item"),
+              //           value: 1,
+              //         ),
+              //         DropdownMenuItem(
+              //           child: Text("Second Item"),
+              //           value: 2,
+              //         ),
+              //         DropdownMenuItem(child: Text("Third Item"), value: 3),
+              //         DropdownMenuItem(child: Text("Fourth Item"), value: 4)
+              //       ],
+              //       onChanged: (value) {
+              //         setState(() {
+              //           _value = value;
+              //         });
+              //       }),
+              // ),
               // Container(
               //   padding: EdgeInsets.all(8),
               //   width: size.width / 2,

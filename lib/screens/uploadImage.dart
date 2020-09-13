@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UploadImgScreen extends StatefulWidget {
   @override
@@ -32,6 +33,28 @@ class _UploadImgScreenState extends State<UploadImgScreen> {
     setState(() {
       _image = File(pickedFile.path);
     });
+  }
+
+  void _uploadimage() async {
+    if (_image != null) {
+      StorageReference ref = FirebaseStorage.instance.ref();
+      StorageTaskSnapshot addImg =
+          await ref.child("image/img").putFile(_image).onComplete;
+      if (addImg.error == null) {
+        print("added to Firebase Storage");
+        final String downloadUrl = await addImg.ref.getDownloadURL();
+        print(downloadUrl);
+
+        await FirebaseFirestore.instance
+            .collection(FirebaseAuth.instance.currentUser.uid)
+            .doc('products')
+            .collection('images')
+            .add({"url": downloadUrl, "name": 'iphone'});
+      } else {
+        print('Error from image repo ${addImg.error.toString()}');
+        throw ('This file is not an image');
+      }
+    }
   }
 
   @override
@@ -67,36 +90,9 @@ class _UploadImgScreenState extends State<UploadImgScreen> {
                       },
                     ),
                     RaisedButton(
-                        child: Text("Save Image"),
-                        onPressed: () async {
-                          if (_image != null) {
-                            StorageReference ref =
-                                FirebaseStorage.instance.ref();
-                            StorageTaskSnapshot addImg = await ref
-                                .child("image/img")
-                                .putFile(_image)
-                                .onComplete;
-                            if (addImg.error == null) {
-                              print("added to Firebase Storage");
-                              final String downloadUrl =
-                                  await addImg.ref.getDownloadURL();
-                              print(downloadUrl);
-
-                              //Only if Firebase App isnt initialized already
-                              //initialize the app here.
-                              Firebase.initializeApp().then((_) async {
-                                await FirebaseFirestore.instance
-                                    .collection('images')
-                                    .add(
-                                        {"url": downloadUrl, "name": 'iphone'});
-                              });
-                            } else {
-                              print(
-                                  'Error from image repo ${addImg.error.toString()}');
-                              throw ('This file is not an image');
-                            }
-                          }
-                        }),
+                      child: Text("Save Image"),
+                      onPressed: _uploadimage,
+                    ),
                     FlatButton(
                       color: Colors.limeAccent,
                       child: Text(
@@ -107,34 +103,6 @@ class _UploadImgScreenState extends State<UploadImgScreen> {
                         openGallery();
                       },
                     ),
-                    //           FlatButton(
-                    //             color: Colors.lightGreen[200],
-                    //             child: Text(
-                    //               "Upload to Firebase",
-                    //               style: TextStyle(color: Colors.black),
-                    //             ),
-                    //             onPressed: () async {
-                    //               StorageTaskSnapshot snapshot = await storage
-                    //     .ref()
-                    //     .child("images/iphone")
-                    //     .putFile(_image)
-                    //     .onComplete;
-                    // if (snapshot.error == null) {
-                    //   final String downloadUrl =
-                    //       await snapshot.ref.getDownloadURL();
-                    //   await Firestore.instance
-                    //       .collection("images")
-                    //       .add({"url": downloadUrl, "name": 'iphone'});
-                    //   final snackBar =
-                    //       SnackBar(content: Text('Yay! Success'));
-                    //   Scaffold.of(context).showSnackBar(snackBar);
-                    // } else {
-                    //   print(
-                    //       'Error from image repo ${snapshot.error.toString()}');
-                    //   throw ('This file is not an image');
-                    // }
-                    //             },
-                    //           ),
                   ],
                 ),
               ],

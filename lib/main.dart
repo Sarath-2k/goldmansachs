@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/screens/homescreen.dart';
+import 'package:goldmansachs/screens/loginScreen.dart';
 import 'package:goldmansachs/screens/uploadImage.dart';
 import 'package:goldmansachs/screens/uploadProduct.dart';
 
@@ -13,7 +15,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: UploadProductData(),
+      home: LoginPage(),
     );
   }
+}
+
+initializeFirebaseApp() {
+  Firebase.initializeApp()
+      .then((_) => print('Flirebase initialized Succesfully...!'));
 }
