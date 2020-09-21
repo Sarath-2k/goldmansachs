@@ -107,7 +107,7 @@ class MyTextFormField extends StatelessWidget {
           decoration: InputDecoration(
               labelText: "Item code",
               // hintText: "Search",
-              prefixIcon: Icon(Icons.qr_code),
+              // prefixIcon: Icon(Icons.qr_code),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8.0)))),
           validator: validator,
