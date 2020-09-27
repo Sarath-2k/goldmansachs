@@ -2,23 +2,24 @@ import 'package:flutter/foundation.dart';
 
 class Product {
   String itemCode;
-  double weight;
+  String weight;
   String decsription;
   String size;
-  String type;
-  String name;
+  // String type;
+  // String name;
   String imgSrc;
-  ProductCategory category;
+  String category;
 
   Product(
       {@required this.itemCode,
       @required this.weight,
       this.decsription = "",
       this.size = "",
-      this.type = "",
-      this.imgSrc = "",
-      @required this.name,
+      // this.type = "",
+      @required this.imgSrc,
+      // @required this.name,
       @required this.category});
 }
 
-enum ProductCategory { chain, necklace, earring, fingerring, pendant, bangles }
+List<Product> products = [];
+bool isLoading = false;

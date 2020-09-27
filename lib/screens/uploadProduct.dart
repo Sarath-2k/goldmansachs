@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:goldmansachs/product.dart';
 
 class UploadProductData extends StatefulWidget {
   @override
@@ -10,8 +9,6 @@ class _UploadProductDataState extends State<UploadProductData> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    int category;
-    int _value = 1;
     return Scaffold(
         appBar: AppBar(
           title: Text("GoldmanSachs"),
