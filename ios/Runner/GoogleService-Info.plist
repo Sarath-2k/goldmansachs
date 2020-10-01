@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>173813206010-pjg4vlmutn2f8t8b6bi8691olsgma0e5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.173813206010-pjg4vlmutn2f8t8b6bi8691olsgma0e5</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCtP5X0BfofCtGZtCCs_-PcO1YKp6qf_00</string>
+	<key>GCM_SENDER_ID</key>
+	<string>173813206010</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.goldmansachs</string>
+	<key>PROJECT_ID</key>
+	<string>goldmansachs-39f2d</string>
+	<key>STORAGE_BUCKET</key>
+	<string>goldmansachs-39f2d.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:173813206010:ios:bbf66daa8e9b0d454db243</string>
+	<key>DATABASE_URL</key>
+	<string>https://goldmansachs-39f2d.firebaseio.com</string>
+</dict>
+</plist>
