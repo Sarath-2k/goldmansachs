@@ -170,6 +170,7 @@ class _DetailsState extends State<Details> {
                   children: <Widget>[
                     //code&category
                     Container(
+                      width: double.infinity,
                       margin: EdgeInsets.only(top: 16),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,11 +180,10 @@ class _DetailsState extends State<Details> {
                           Expanded(
                             child: _buildCode(),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 16),
                           Container(
                             width: 132,
-                            child: ListTile(
-                              trailing: DropdownButton(
+                            child: DropdownButton(
                                   value: selectedvalue,
                                   hint: Text("Category"),
                                   items: _dropdownMenuItems,
@@ -192,7 +192,7 @@ class _DetailsState extends State<Details> {
                                       selectedvalue = newValue;
                                     });
                                   })),
-                            ),
+                            
                           ),
                           // Expanded(
                           //   child: _buildCategory(),

@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           IconButton(
-              icon: Icon(Icons.refresh_outlined),
+              icon: Icon(Icons.refresh),
               onPressed: getProductsFromFirestore)
         ],
       ),
