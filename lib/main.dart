@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';
+import 'package:goldmansachs/shareRef';
 
 void main() {
   runApp(MyApp());

@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/screens/formpage.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';
+import 'package:goldmansachs/share.dart';
 
 import '../product.dart';
 
@@ -11,6 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int shareCount = 0;
+  List<ShareProduct> shareProductList = [];
+
   @override
   void initState() {
     super.initState();
@@ -62,8 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: getProductsFromFirestore)
+              icon: Icon(Icons.share),
+              onPressed: () {
+                shareOut(shareProductList);
+                shareProductList = [];
+                setState(() {
+                  shareCount = 0;
+                });
+              }),
+          IconButton(
+              icon: Icon(Icons.refresh), onPressed: getProductsFromFirestore)
         ],
       ),
       drawer: Drawer(
@@ -86,11 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, index) {
-          return ProductTile(
-            titleText: products[index].itemCode,
-            subtitleText: products[index].weight,
-            imageSrc: products[index].imgSrc,
-          );
+          return buildProductTile(products[index].itemCode,
+              products[index].weight, products[index].imgSrc, context);
         },
         // body: GridView.count(
         //   // semanticChildCount: 2,
@@ -108,7 +121,131 @@ class _HomeScreenState extends State<HomeScreen> {
         //   ],
         // ),
       ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: null,
+          child: Text(shareCount.toString(), style: TextStyle(fontSize: 24))),
     );
+  }
+
+  buildProductTile(String titleText, String subtitleText, String imageSrc,
+      BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(6),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[300],
+              spreadRadius: 1,
+              blurRadius: 6,
+              // offset: Offset(1, 1)
+            )
+          ],
+        ),
+        child: InkWell(
+          onLongPress: () {
+            bool search = false;
+            int counter = 0;
+            int indexToDelete = -1;
+            shareProductList.forEach((element) {
+              if (titleText == element.fileName) {
+                search = true;
+                indexToDelete = counter;
+              }
+              counter++;
+            });
+
+            if (search) {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                          title: Text(
+                        'Removed from share!',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      )));
+              shareProductList.removeAt(indexToDelete);
+              setState(() {
+                shareCount--;
+              });
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: LinearProgressIndicator(),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Text(
+                                'Adding to share!',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
+              getBytes(imageSrc).then((bytes) {
+                ShareProduct share = ShareProduct(
+                    fileName: titleText, downloadUrl: imageSrc, bytes: bytes);
+
+                shareProductList.add(share);
+                print('added');
+                setState(() {
+                  shareCount++;
+                });
+
+                Navigator.pop(context);
+              });
+            }
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.network(
+                      imageSrc,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                titleText,
+                maxLines: 1,
+                // softWrap: false,
+                overflow: TextOverflow.fade,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.7),
+              ),
+              Text(
+                '${subtitleText}g',
+                softWrap: false,
+                // maxLines: 1,
+                overflow: TextOverflow.fade,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .copyWith(letterSpacing: 1.3),
+              )
+            ],
+          ),
+        ));
   }
 }
 
@@ -162,70 +299,5 @@ class DrawerListItem extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class ProductTile extends StatelessWidget {
-  final String titleText;
-  final String subtitleText;
-  final String imageSrc;
-  ProductTile(
-      {@required this.titleText,
-      @required this.subtitleText,
-      @required this.imageSrc});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(6),
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey[300],
-              spreadRadius: 1,
-              blurRadius: 6,
-              // offset: Offset(1, 1)
-            )
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Image.network(
-                    imageSrc,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            Text(
-              titleText,
-              maxLines: 1,
-              // softWrap: false,
-              overflow: TextOverflow.fade,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6
-                  .copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.7),
-            ),
-            Text(
-              '${subtitleText}g',
-              softWrap: false,
-              // maxLines: 1,
-              overflow: TextOverflow.fade,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  .copyWith(letterSpacing: 1.3),
-            )
-          ],
-        ));
   }
 }
