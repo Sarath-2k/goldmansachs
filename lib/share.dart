@@ -12,7 +12,7 @@ class ShareProduct {
   ShareProduct(
       {@required this.fileName,
       @required this.downloadUrl,
-      @required this.bytes}) {}
+      @required this.bytes});
 }
 
 shareOut(List<ShareProduct> shareProductList) async {

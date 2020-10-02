@@ -1,8 +1,4 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/screens/formpage.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';

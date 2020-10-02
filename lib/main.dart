@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';
-import 'package:goldmansachs/shareRef';
+import 'package:goldmansachs/screens/productpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // theme: ThemeData.dark(),
       theme: ThemeData(primaryColor: Colors.green),
-      home: LoginPage(),
+      home: ProductPage(),
     );
   }
 }
