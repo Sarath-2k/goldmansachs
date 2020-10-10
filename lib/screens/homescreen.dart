@@ -72,8 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.share),
               onPressed: () {
                 if (shareProductList.length > 0) {
-                  // shareOut(shareProductList);
-                  initializeOrder(listOrderProductsGlobal);
+                  shareOut(shareProductList);
                   shareProductList = [];
                   setState(() {
                     shareCount = 0;
@@ -104,8 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               icon: Icon(Icons.refresh), onPressed: getProductsFromFirestore),
           IconButton(
-              icon: Icon(Icons.send), onPressed: () {
-                reportView(context); 
+              icon: Icon(Icons.send),
+              onPressed: () {
+                initializeOrder();
+                // listOrderProductsGlobal = [];
+                reportView(context);
               }),
         ],
       ),
@@ -129,13 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, index) {
-          return buildProductTile(
-              products[index].itemCode,
-              products[index].weight,
-              products[index].imgSrc,
-              context,
-              index,
-              products[index]);
+          return buildProductTile(products[index].itemCode,
+              products[index].weight, products[index].imgSrc, context, index);
         },
         // body: GridView.count(
         //   // semanticChildCount: 2,
@@ -161,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   buildProductTile(String titleText, String subtitleText, String imageSrc,
-      BuildContext context, int index, Product product) {
+      BuildContext context, int index) {
     return Container(
         margin: EdgeInsets.all(6),
         padding: const EdgeInsets.all(8),
@@ -237,7 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
               getBytes(imageSrc).then((bytes) {
                 ShareProduct share = ShareProduct(
                     fileName: titleText, downloadUrl: imageSrc, bytes: bytes);
-                listOrderProductsGlobal.add(product);
                 shareProductList.add(share);
                 print('added');
                 setState(() {

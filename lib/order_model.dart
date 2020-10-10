@@ -45,9 +45,7 @@ class OrderItem {
     if (orderSize == null) orderSize = product.size;
     if (orderNote == null) orderNote = 'No notes provided';
     if (orderMarkings == null) orderMarkings = 'No data provided';
-    networkImageToByte(
-            product.imgSrc)
-        .then((value) {
+    networkImageToByte(product.imgSrc).then((value) {
       print('byteData generation complete ${product.itemCode}');
 
       pdfImage = PdfImage.file(pdf.document, bytes: value);
@@ -58,17 +56,17 @@ class OrderItem {
 List<OrderItem> orderItems = [];
 FinalOrder finalOrder;
 Document pdf = Document();
-List<Product> listOrderProductsGlobal = [];
+// List<Product> listOrderProductsGlobal = [];
 
-initializeOrder(List<Product> orderProductsList) async {
-  orderProductsList.forEach((element) {
-    OrderItem orderItem = OrderItem(
-        product: element,
-        orderWeight: element.weight,
-        orderSize: element.size,
-        orderQuantity: 2);
-    orderItems.add(orderItem);
-  });
+initializeOrder() async {
+  // orderProductsList.forEach((element) {
+  //   OrderItem orderItem = OrderItem(
+  //       product: element,
+  //       orderWeight: element.weight,
+  //       orderSize: element.size,
+  //       orderQuantity: 2);
+  //   orderItems.add(orderItem);
+  // });
 
   finalOrder = FinalOrder(
       orderID: '#1074',

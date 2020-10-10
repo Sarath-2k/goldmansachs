@@ -5,8 +5,7 @@ class Product {
   String weight;
   String description;
   String size;
-  // String type;
-  // String name;
+
   String imgSrc;
   String category;
 
@@ -15,9 +14,7 @@ class Product {
       @required this.weight,
       this.description = "",
       this.size = "",
-      // this.type = "",
       @required this.imgSrc,
-      // @required this.name,
       @required this.category});
 }
 

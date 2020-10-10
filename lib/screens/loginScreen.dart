@@ -130,17 +130,6 @@ class _State extends State<LoginPage> {
                 ),
               ),
             ),
-
-            // Container(
-            //   height: 50,
-            //   margin: EdgeInsets.symmetric(horizontal: 150),
-            //   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            //   child: RaisedButton(
-            //       textColor: Colors.white,
-            //       color: Colors.blue,
-            //       child: Text('Login'),
-            //       onPressed: _login),
-            // )
           ],
         ),
       ),

@@ -1,14 +1,172 @@
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/product.dart';
 
+import '../order_model.dart';
+
 class ProductPage extends StatelessWidget {
   ProductPage({this.product});
   final Product product;
 
+  final GlobalKey<FormState> _orderFormKey = GlobalKey<FormState>();
+  int orderQuantity;
+  String orderSize;
+  String orderWeight;
+  String orderNotes;
+  String orderSeal;
+
+  addToOrderFormDialog(BuildContext context) {
+    // listOrderProductsGlobal.add(product);
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            scrollable: true,
+            title: Text(
+              'add to order',
+              style: TextStyle(fontSize: 24),
+            ),
+            content: Form(
+              key: _orderFormKey,
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Item code :  ${product.itemCode}'),
+                    SizedBox(height: 10),
+                    Text('Category :  ${product.category}'),
+                    SizedBox(height: 20),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('Quantity :  '),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.24,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            initialValue: '1',
+                            onSaved: (value) {
+                              orderQuantity = int.parse(value);
+                            },
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Quantity is Required';
+                              }
+                              return null;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('Weight (g) :  '),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.24,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            initialValue: product.weight,
+                            onSaved: (value) {
+                              orderWeight = value;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('Size :  '),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          child: TextFormField(
+                            initialValue: product.size,
+                            onSaved: (value) {
+                              orderSize = value;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('Seal :  '),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          child: TextFormField(
+                            initialValue: '',
+                            onSaved: (value) {
+                              orderSeal = value;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Notes :  '),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          // height: 30,
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: TextFormField(
+                            initialValue: '',
+                            maxLines: 3,
+                            onSaved: (value) {
+                              orderNotes = value;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ]),
+            ),
+            actions: [
+              RaisedButton(
+                onPressed: () {
+                  if (!_orderFormKey.currentState.validate()) {
+                    return;
+                  }
+
+                  _orderFormKey.currentState.save();
+
+                  print(
+                      '$orderQuantity , $orderSeal , $orderSize , $orderWeight , $orderNotes');
+                },
+                child: Text('ADD TO ORDER'),
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.2),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.shop),
+              onPressed: () {
+                addToOrderFormDialog(context);
+              })
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
