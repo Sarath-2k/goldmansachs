@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 class Product {
   String itemCode;
   String weight;
-  String decsription;
+  String description;
   String size;
   // String type;
   // String name;
@@ -13,7 +13,7 @@ class Product {
   Product(
       {@required this.itemCode,
       @required this.weight,
-      this.decsription = "",
+      this.description = "",
       this.size = "",
       // this.type = "",
       @required this.imgSrc,
@@ -23,3 +23,12 @@ class Product {
 
 List<Product> products = [];
 bool isLoading = false;
+
+List<String> listCategory = [
+  "Chain",
+  "Bangles",
+  "Ear rings",
+  "FInger rings",
+  "Pendant",
+  "Neckalce",
+];

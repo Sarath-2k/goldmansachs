@@ -223,6 +223,8 @@ PODS:
     - Firebase/Firestore (~> 6.26.0)
     - firebase_core
     - Flutter
+  - esys_flutter_share (0.0.1):
+    - Flutter
   - Firebase/Auth (6.26.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.5.3)
@@ -333,15 +335,19 @@ PODS:
     - nanopb/encode (= 1.30905.0)
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
+  - path_provider (0.0.1):
+    - Flutter
   - PromisesObjC (1.2.10)
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - esys_flutter_share (from `.symlinks/plugins/esys_flutter_share/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 SPEC REPOS:
   trunk:
@@ -367,6 +373,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  esys_flutter_share:
+    :path: ".symlinks/plugins/esys_flutter_share/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -377,11 +385,14 @@ EXTERNAL SOURCES:
     :path: Flutter
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: b054ccc068b5907645c32b669d38e82db2a11fc7
+  esys_flutter_share: 403498dab005b36ce1f8d7aff377e81f0621b0b4
   Firebase: 7cf5f9c67f03cb3b606d1d6535286e1080e57eb6
   firebase_auth: c42c06a212439824b5da53437da905931e8e6b9a
   firebase_core: 3134fe79d257d430f163b558caf52a10a87efe8a
@@ -402,6 +413,7 @@ SPEC CHECKSUMS:
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

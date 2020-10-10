@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:goldmansachs/product.dart';
 
 class ProductPage extends StatelessWidget {
+  ProductPage({this.product});
+  final Product product;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
-              child: Column(
+        child: Column(
           children: [
             Container(
               height: 460,
@@ -18,37 +22,40 @@ class ProductPage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  'https://lh3.googleusercontent.com/proxy/S_BtJ9Bk8cpVPchMMNHdFRcfYkpXVYlf3XUgAcMkUTQIy3d7na18cu5hA22mj3Cn7XeZ3HYCyfF_CEim23ukEBa33ucXRbt95Rw_61-oZtxsBKHnCnFIoaHbhpRBrMBOGMeFAjDr8UpNzD4evcblaTDkOiQ7qa1Q6XBqvtgebGt12L6Cq1DQal4bfw',
+                  product.imgSrc,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left:20, top: 4, bottom: 12, right: 20),
+              padding: EdgeInsets.only(left: 20, top: 4, bottom: 12, right: 20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('FR1012',
+                  Text(product.itemCode,
                       style:
                           TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
-                  Text('24.8g',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.normal)),
+                  Text('${product.weight} g',
+                      style: TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.normal)),
                 ],
               ),
             ),
             Column(children: [
               AddtnlInfoBar(
-                  keyText: ('Size' == null) ? '' : 'Size', valueText: 'Medium'),
+                  keyText: (product.size == null) ? '' : 'Size',
+                  valueText: product.size),
             ]),
             Column(children: [
               AddtnlInfoBar(
-                  keyText: ('Category' == null) ? '' : 'Category', valueText: 'Finger ring'),
+                  keyText: (product.category == null) ? '' : 'Category',
+                  valueText: product.category),
             ]),
             Column(children: [
               AddtnlInfoBar(
-                  keyText: ('Description' == null) ? '' : 'Description', valueText: 'New model\nSingapore Collection\nLimited quantity'),
+                  keyText: (product.category == null) ? '' : 'Description',
+                  valueText: product.description),
             ]),
           ],
         ),
@@ -71,7 +78,7 @@ class AddtnlInfoBar extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
         decoration: BoxDecoration(
           color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:goldmansachs/screens/formpage.dart';
+import 'package:goldmansachs/order_model.dart';
+import 'package:goldmansachs/screens/addProduct.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';
+import 'package:goldmansachs/screens/productpage.dart';
+import 'package:goldmansachs/screens/report_pdf.dart';
 import 'package:goldmansachs/share.dart';
 
 import '../product.dart';
@@ -39,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           weight: element.data()['weight'],
           imgSrc: element.data()['imgSrc'],
           category: element.data()['category'],
-          decsription: element.data()['description'],
+          description: element.data()['description'],
           size: element.data()['size'],
         );
         products.add(product);
@@ -68,14 +71,42 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               icon: Icon(Icons.share),
               onPressed: () {
-                shareOut(shareProductList);
-                shareProductList = [];
-                setState(() {
-                  shareCount = 0;
-                });
+                if (shareProductList.length > 0) {
+                  // shareOut(shareProductList);
+                  initializeOrder(listOrderProductsGlobal);
+                  shareProductList = [];
+                  setState(() {
+                    shareCount = 0;
+                  });
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                child: Center(
+                                  child: Text(
+                                    'No products selected to share!',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )));
+                }
               }),
           IconButton(
-              icon: Icon(Icons.refresh), onPressed: getProductsFromFirestore)
+              icon: Icon(Icons.refresh), onPressed: getProductsFromFirestore),
+          IconButton(
+              icon: Icon(Icons.send), onPressed: () {
+                reportView(context); 
+              }),
         ],
       ),
       drawer: Drawer(
@@ -84,13 +115,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               DrawerLogoWidget("BB GOLD"),
               Container(
-                  margin: EdgeInsets.only(bottom: 6, top: 4),
-                  child: DrawerListItem("ALL ITEMS")),
-              DrawerListItem("CHAIN"),
-              DrawerListItem("PENDANT"),
-              DrawerListItem("EAR RING"),
-              DrawerListItem("NECKLACE"),
-              DrawerListItem("FINGER RING"),
+                margin: EdgeInsets.only(bottom: 6, top: 4),
+                child: DrawerListItem("ALL ITEMS"),
+              ),
+              Column(
+                  children: listCategory
+                      .map((e) => DrawerListItem(e.toUpperCase()))
+                      .toList())
             ]),
       ),
       body: GridView.builder(
@@ -98,8 +129,13 @@ class _HomeScreenState extends State<HomeScreen> {
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, index) {
-          return buildProductTile(products[index].itemCode,
-              products[index].weight, products[index].imgSrc, context);
+          return buildProductTile(
+              products[index].itemCode,
+              products[index].weight,
+              products[index].imgSrc,
+              context,
+              index,
+              products[index]);
         },
         // body: GridView.count(
         //   // semanticChildCount: 2,
@@ -125,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   buildProductTile(String titleText, String subtitleText, String imageSrc,
-      BuildContext context) {
+      BuildContext context, int index, Product product) {
     return Container(
         margin: EdgeInsets.all(6),
         padding: const EdgeInsets.all(8),
@@ -142,6 +178,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         child: InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductPage(
+                product: products[index],
+              ),
+            ),
+          ),
           onLongPress: () {
             bool search = false;
             int counter = 0;
@@ -193,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
               getBytes(imageSrc).then((bytes) {
                 ShareProduct share = ShareProduct(
                     fileName: titleText, downloadUrl: imageSrc, bytes: bytes);
-
+                listOrderProductsGlobal.add(product);
                 shareProductList.add(share);
                 print('added');
                 setState(() {
@@ -219,25 +263,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Text(
-                titleText,
-                maxLines: 1,
-                // softWrap: false,
-                overflow: TextOverflow.fade,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.7),
-              ),
-              Text(
-                '${subtitleText}g',
-                softWrap: false,
-                // maxLines: 1,
-                overflow: TextOverflow.fade,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    .copyWith(letterSpacing: 1.3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    titleText,
+                    maxLines: 1,
+                    // softWrap: false,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        letterSpacing: 1.6),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(4)),
+                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                    child: Text(
+                      '${subtitleText}g',
+                      softWrap: false,
+                      // maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          letterSpacing: 1.3),
+                    ),
+                  ),
+                ],
               )
             ],
           ),
