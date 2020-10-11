@@ -130,7 +130,7 @@ reportView(context) async {
                                       Text('Size: ${orderItem.orderSize}\n\n',
                                           style: TextStyle(fontSize: 16)),
                                       Text(
-                                          'Weight: ${orderItem.orderWeight}\n\n',
+                                          'Weight: ${orderItem.orderWeight}g\n\n',
                                           style: TextStyle(fontSize: 16)),
                                     ]),
                               ),
@@ -155,11 +155,28 @@ reportView(context) async {
   final String dir = (await getApplicationDocumentsDirectory()).path;
   final String path = '$dir/reportOne.pdf';
   print(path);
-  final File file = File(path);
-  await file.writeAsBytes(pdf.save());
-  material.Navigator.of(context).push(
-    material.MaterialPageRoute(
-      builder: (_) => PdfViewerPage(path: path),
-    ),
-  );
+
+  File file = File(path);
+  file.exists().then((value) async {
+    if (value) {
+      file.delete();
+      file = File(path);
+      print('$value - deleting');
+      await file.writeAsBytes(pdf.save());
+      material.Navigator.of(context).push(
+        material.MaterialPageRoute(
+          builder: (_) => PdfViewerPage(path: path),
+        ),
+      );
+      pdf = Document();
+    } else {
+      await file.writeAsBytes(pdf.save());
+      material.Navigator.of(context).push(
+        material.MaterialPageRoute(
+          builder: (_) => PdfViewerPage(path: path),
+        ),
+      );
+      pdf = Document();
+    }
+  });
 }

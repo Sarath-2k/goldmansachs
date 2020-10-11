@@ -56,9 +56,10 @@ class OrderItem {
 List<OrderItem> orderItems = [];
 FinalOrder finalOrder;
 Document pdf = Document();
-// List<Product> listOrderProductsGlobal = [];
 
 initializeOrder() async {
+
+
   // orderProductsList.forEach((element) {
   //   OrderItem orderItem = OrderItem(
   //       product: element,

@@ -6,6 +6,7 @@ import 'package:goldmansachs/screens/loginScreen.dart';
 import 'package:goldmansachs/screens/productpage.dart';
 import 'package:goldmansachs/screens/report_pdf.dart';
 import 'package:goldmansachs/share.dart';
+import 'package:pdf/widgets.dart' as pdfwidgets;
 
 import '../product.dart';
 
@@ -17,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int shareCount = 0;
   List<ShareProduct> shareProductList = [];
+  List<String> shareProductItemCodeList = [];
 
   @override
   void initState() {
@@ -74,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (shareProductList.length > 0) {
                   shareOut(shareProductList);
                   shareProductList = [];
+                  shareProductItemCodeList = [];
                   setState(() {
                     shareCount = 0;
                   });
@@ -106,8 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.send),
               onPressed: () {
                 initializeOrder();
-                // listOrderProductsGlobal = [];
                 reportView(context);
+                orderItems = [];
               }),
         ],
       ),
@@ -131,24 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, index) {
-          return buildProductTile(products[index].itemCode,
-              products[index].weight, products[index].imgSrc, context, index);
+          return buildProductTile(products, context, index);
         },
-        // body: GridView.count(
-        //   // semanticChildCount: 2,
-        //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-        //   mainAxisSpacing: 10,
-        //   crossAxisSpacing: 10,
-        //   crossAxisCount: 2,
-        //   children: [
-        //     ProductTile(
-        //       titleText: 'iPhone 7',
-        //       subtitleText: 'Apple | 256 GB | 5.5\" LCD',
-        //       imageSrc:
-        //           'https://i.ndtvimg.com/video/images/vod/medium/2016-09/big_430454_1473307705.jpg?downsize=600:450',
-        //     ),
-        //   ],
-        // ),
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
@@ -157,8 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  buildProductTile(String titleText, String subtitleText, String imageSrc,
-      BuildContext context, int index) {
+  buildProductTile(List<Product> products, BuildContext context, int index) {
     return Container(
         margin: EdgeInsets.all(6),
         padding: const EdgeInsets.all(8),
@@ -188,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
             int counter = 0;
             int indexToDelete = -1;
             shareProductList.forEach((element) {
-              if (titleText == element.fileName) {
+              if (products[index].itemCode == element.fileName) {
                 search = true;
                 indexToDelete = counter;
               }
@@ -196,15 +182,16 @@ class _HomeScreenState extends State<HomeScreen> {
             });
 
             if (search) {
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                          title: Text(
-                        'Removed from share!',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      )));
+              // showDialog(
+              //     context: context,
+              //     builder: (context) => AlertDialog(
+              //             title: Text(
+              //           'Removed from share!',
+              //           style: TextStyle(
+              //               fontSize: 24, fontWeight: FontWeight.bold),
+              //         )));
               shareProductList.removeAt(indexToDelete);
+              shareProductItemCodeList.removeAt(indexToDelete);
               setState(() {
                 shareCount--;
               });
@@ -231,10 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ));
-              getBytes(imageSrc).then((bytes) {
+              getBytes(products[index].imgSrc).then((bytes) {
                 ShareProduct share = ShareProduct(
-                    fileName: titleText, downloadUrl: imageSrc, bytes: bytes);
+                    fileName: products[index].itemCode,
+                    downloadUrl: products[index].imgSrc,
+                    bytes: bytes);
                 shareProductList.add(share);
+                shareProductItemCodeList.add(products[index].itemCode);
                 print('added');
                 setState(() {
                   shareCount++;
@@ -249,21 +239,35 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Expanded(
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.network(
-                      imageSrc,
-                      fit: BoxFit.cover,
+                child: Stack(children: [
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.network(
+                        products[index].imgSrc,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
+                  (shareProductItemCodeList.contains(products[index].itemCode))
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 24,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                ]),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    titleText,
+                    products[index].itemCode,
                     maxLines: 1,
                     // softWrap: false,
                     overflow: TextOverflow.fade,
@@ -278,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(4)),
                     padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                     child: Text(
-                      '${subtitleText}g',
+                      '${products[index].weight}g',
                       softWrap: false,
                       // maxLines: 1,
                       overflow: TextOverflow.fade,
