@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:goldmansachs/order_model.dart';
 import 'package:goldmansachs/screens/addProduct.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';
+import 'package:goldmansachs/screens/processFinalOrder.dart';
 import 'package:goldmansachs/screens/productpage.dart';
 import 'package:goldmansachs/screens/report_pdf.dart';
 import 'package:goldmansachs/share.dart';
@@ -92,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Center(
                                   child: Text(
-                                    'No products selected to share!',
+                                    'No products selected to share!!',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
@@ -108,9 +109,33 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               icon: Icon(Icons.send),
               onPressed: () {
-                initializeOrder();
-                reportView(context);
-                orderItems = [];
+                if (orderItems.length > 0) {
+                  // initializeOrder();
+                  // reportView(context);
+                  // orderItems = [];
+                  processOrderForm(context);
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                child: Center(
+                                  child: Text(
+                                    'No products added to process order!!',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )));
+                }
               }),
         ],
       ),
@@ -140,7 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: null,
-          child: Text(shareCount.toString(), style: TextStyle(fontSize: 24))),
+          child: Text(orderItems.length.toString(),
+              style: TextStyle(fontSize: 24))),
     );
   }
 

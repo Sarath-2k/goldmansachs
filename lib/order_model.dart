@@ -8,18 +8,18 @@ import 'package:pdf/widgets.dart';
 
 class FinalOrder {
   String orderID;
-  String partyName;
-  String partyContact;
-  String partyCity;
+  // String partyName;
+  // String partyContact;
+  // String partyCity;
   DateTime orderDate;
   DateTime orderDueDate;
   List<OrderItem> orderItems;
 
   FinalOrder({
     @required this.orderID,
-    @required this.partyName,
-    @required this.partyContact,
-    @required this.partyCity,
+    // @required this.partyName,
+    // @required this.partyContact,
+    // @required this.partyCity,
     @required this.orderDate,
     @required this.orderDueDate,
     @required this.orderItems,
@@ -43,8 +43,8 @@ class OrderItem {
       this.orderMarkings}) {
     if (orderWeight == null) orderWeight = product.weight;
     if (orderSize == null) orderSize = product.size;
-    if (orderNote == null) orderNote = 'No notes provided';
-    if (orderMarkings == null) orderMarkings = 'No data provided';
+    if (orderNote == '') orderNote = 'No notes provided';
+    if (orderMarkings == '') orderMarkings = 'No data provided';
     networkImageToByte(product.imgSrc).then((value) {
       print('byteData generation complete ${product.itemCode}');
 
@@ -57,7 +57,7 @@ List<OrderItem> orderItems = [];
 FinalOrder finalOrder;
 Document pdf = Document();
 
-initializeOrder() async {
+initializeOrder({String orderID, DateTime orderDate, DateTime orderDueDate}) async {
 
 
   // orderProductsList.forEach((element) {
@@ -70,12 +70,12 @@ initializeOrder() async {
   // });
 
   finalOrder = FinalOrder(
-      orderID: '#1074',
-      partyName: 'Kalyan Jewellers',
-      partyContact: '+91 8111 834 999',
-      partyCity: 'Calicut',
-      orderDate: DateTime.now(),
-      orderDueDate: DateTime(2020, 11, 12),
+      orderID: orderID,
+      // partyName: 'Kalyan Jewellers',
+      // partyContact: '+91 8111 834 999',
+      // partyCity: 'Calicut',
+      orderDate: orderDate,
+      orderDueDate: orderDueDate,
       orderItems: orderItems);
 
   print(finalOrder.orderDueDate);
