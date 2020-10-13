@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:goldmansachs/product.dart';
 import 'package:network_image_to_byte/network_image_to_byte.dart';
@@ -58,16 +56,6 @@ FinalOrder finalOrder;
 Document pdf = Document();
 
 initializeOrder({String orderID, DateTime orderDate, DateTime orderDueDate}) async {
-
-
-  // orderProductsList.forEach((element) {
-  //   OrderItem orderItem = OrderItem(
-  //       product: element,
-  //       orderWeight: element.weight,
-  //       orderSize: element.size,
-  //       orderQuantity: 2);
-  //   orderItems.add(orderItem);
-  // });
 
   finalOrder = FinalOrder(
       orderID: orderID,

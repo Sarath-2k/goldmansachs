@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:goldmansachs/order_model.dart';
 import 'package:goldmansachs/screens/addProduct.dart';
 import 'package:goldmansachs/screens/loginScreen.dart';
 import 'package:goldmansachs/screens/processFinalOrder.dart';
 import 'package:goldmansachs/screens/productpage.dart';
-import 'package:goldmansachs/screens/report_pdf.dart';
 import 'package:goldmansachs/share.dart';
-import 'package:pdf/widgets.dart' as pdfwidgets;
 
 import '../product.dart';
 
@@ -21,10 +20,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ShareProduct> shareProductList = [];
   List<String> shareProductItemCodeList = [];
 
+  // String filterContent = '';
+  String selectedChoice = 'All Items';
+  List<Product> filteredListProducts = [];
+  List<String> filterListCategory = ['All Items'] + listCategory;
+
   @override
   void initState() {
     super.initState();
     getProductsFromFirestore();
+    filteredListProducts = products;
     print("\n Entered homescreen init \n");
     print("\n\n");
   }
@@ -53,6 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
       print('\n\n\n processing complete');
     }).then((_) {
       setState(() {});
+    });
+  }
+
+  filterChoiceChipProducts(String filterCategory) {
+    filteredListProducts = [];
+    products.forEach((element) {
+      if (element.category.contains(filterCategory))
+        filteredListProducts.add(element);
     });
   }
 
@@ -154,19 +167,61 @@ class _HomeScreenState extends State<HomeScreen> {
                       .toList())
             ]),
       ),
-      body: GridView.builder(
-        itemCount: products.length,
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, index) {
-          return buildProductTile(products, context, index);
-        },
+      body: Column(
+        children: [
+          buildFilterChips(context),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.82,
+            child: GridView.builder(
+              itemCount: filteredListProducts.length,
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemBuilder: (BuildContext context, index) =>
+                  buildProductTile(filteredListProducts, context, index),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: null,
           child: Text(orderItems.length.toString(),
               style: TextStyle(fontSize: 24))),
+    );
+  }
+
+  Container buildFilterChips(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.08,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: filterListCategory
+              .map((e) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: ChoiceChip(
+                      backgroundColor: Colors.grey[300],
+                      label: Text(e),
+                      labelStyle: TextStyle(
+                          color: selectedChoice == e
+                              ? Colors.white
+                              : Colors.black),
+                      selected: selectedChoice == e,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          selectedChoice = e;
+                          (e == 'All Items')
+                              ? filteredListProducts = products
+                              : filterChoiceChipProducts(e);
+                        });
+                      },
+                      selectedColor: Theme.of(context).accentColor,
+                    ),
+                  ))
+              .toList(),
+        ),
+      ),
     );
   }
 

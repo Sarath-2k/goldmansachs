@@ -59,7 +59,7 @@ reportView(context) async {
             child: Text('order ${finalOrder.orderID}', textScaleFactor: 2)),
         Padding(padding: const EdgeInsets.all(12)),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             // Column(
             //   crossAxisAlignment: CrossAxisAlignment.start,
