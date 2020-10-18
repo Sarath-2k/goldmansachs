@@ -68,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
         filteredListProducts.add(element);
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,28 +125,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   // initializeOrder();
                   // reportView(context);
                   // orderItems = [];
+                  print(orderItems);
                   processOrderForm(context);
+                  setState(() {});
                 } else {
                   showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                              child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Center(
-                                  child: Text(
-                                    'No products added to process order!!',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                    context: context,
+                    builder: (context) => Dialog(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Center(
+                              child: Text(
+                                'No products added to process order!!',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                            ],
-                          )));
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 }
               }),
         ],
@@ -170,8 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           buildFilterChips(context),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.82,
+          Expanded(
+            // height: MediaQuery.of(context).size.height * 0.82,
             child: GridView.builder(
               itemCount: filteredListProducts.length,
               gridDelegate:

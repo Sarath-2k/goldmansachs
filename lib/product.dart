@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class Product {
   String itemCode;
@@ -8,6 +9,7 @@ class Product {
 
   String imgSrc;
   String category;
+  Image image;
 
   Product(
       {@required this.itemCode,
@@ -15,7 +17,9 @@ class Product {
       this.description = "",
       this.size = "",
       @required this.imgSrc,
-      @required this.category});
+      @required this.category}) {
+        image = Image.network(imgSrc);
+      }
 }
 
 List<Product> products = [];

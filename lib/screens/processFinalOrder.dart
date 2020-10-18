@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -9,7 +10,7 @@ processOrderForm(BuildContext context) {
 
   String orderID;
   DateTime orderDate = DateTime.now();
-  DateTime orderDueDate;
+  DateTime orderDueDate = DateTime.now().add(Duration(days: 20));
 
   showDialog(
       context: context,
@@ -34,14 +35,14 @@ processOrderForm(BuildContext context) {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         height: 30,
-                        width: MediaQuery.of(context).size.width * 0.24,
+                        width: MediaQuery.of(context).size.width * 0.32,
                         child: TextFormField(
                           initialValue: '#',
                           onSaved: (value) {
                             orderID = value;
                           },
                           validator: (String value) {
-                            if (value.isEmpty) {
+                            if (value.isEmpty || value == '#') {
                               return 'Order ID is Required';
                             }
                             return null;
@@ -52,33 +53,53 @@ processOrderForm(BuildContext context) {
                               hintText: 'orderID'),
                         ),
                       ),
-                      SizedBox(width: 140)
+                      SizedBox(width: 15)
                     ],
                   ),
                   SizedBox(height: 20),
                   Text(
-                      'Order Date :  ${intl.DateFormat('dd/MM/yyyy').format(DateTime.now())}'),
+                      'Order Date :             ${intl.DateFormat('dd/MM/yyyy').format(DateTime.now())}'),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text('Order Due Date :  '),
+                      Text('Order Due Date :     ${intl.DateFormat('dd/MM/yyyy').format(orderDueDate)}'),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextFormField(
-                          // initialValue: product.size,
-                          onSaved: (value) {
-                            orderDueDate = DateTime.now();
-                          },
-                          decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              filled: true,
-                              hintText: 'Due Date'),
+                        // width: MediaQuery.of(context).size.width * 0.30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            // orderDueDate ?? Text('Select a date'),
+                            IconButton(
+                              icon: Icon(Icons.date_range, color: Colors.green),
+                              onPressed: () async {
+                                orderDueDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate:
+                                      DateTime.now().add(Duration(days: 120)),
+                                );
+                                
+                              },
+                            )
+                          ],
                         ),
-                      )
+
+                        // TextFormField(
+                        //   // initialValue: product.size,
+                        //   onSaved: (value) {
+                        //     orderDueDate = DateTime.now();
+                        //   },
+                        //   decoration: InputDecoration(
+                        //       border: UnderlineInputBorder(),
+                        //       filled: true,
+                        //       hintText: 'Due Date'),
+                        // ),
+                      ),
                     ],
                   ),
                 ]),
