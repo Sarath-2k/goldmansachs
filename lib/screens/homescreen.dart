@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     productsCollection.get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
-        print(element.data()['imgSrc']);
+        // print(element.data()['imgSrc']);
 
         Product product = Product(
           itemCode: element.data()['code'],
@@ -68,21 +68,24 @@ class _HomeScreenState extends State<HomeScreen> {
         filteredListProducts.add(element);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Products"),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.pushReplacement(
-              (context),
-              MaterialPageRoute(
-                builder: (context) => Details(),
-              ),
-            ),
-          ),
+          accessCode == 'admin'
+              ? IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => Navigator.pushReplacement(
+                    (context),
+                    MaterialPageRoute(
+                      builder: (context) => Details(),
+                    ),
+                  ),
+                )
+              : Container(),
           IconButton(
               icon: Icon(Icons.share),
               onPressed: () {
